@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import BalanceCard from "../components/BalanceCard";
+import GroupCard from "../components/GroupCard";
 
 function Dashboard() {
   // Sample balance data
@@ -152,29 +153,12 @@ function Dashboard() {
 
             <div className="space-y-4">
               {groups.map((group) => (
-                <div
+                <GroupCard
                   key={group.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-100 p-4"
-                >
-                  <div>
-                    <h4 className="font-semibold text-gray-800">
-                      {group.name}
-                    </h4>
-
-                    <p className="mt-1 text-sm text-gray-500">
-                      {group.members} members
-                    </p>
-                  </div>
-
-                  <p
-                    className={`font-semibold ${
-                      group.balance >= 0 ? "text-green-600" : "text-red-500"
-                    }`}
-                  >
-                    {group.balance >= 0 ? "+" : "-"}$
-                    {Math.abs(group.balance).toFixed(2)}
-                  </p>
-                </div>
+                  name={group.name}
+                  members={group.members}
+                  balance={group.balance}
+                />
               ))}
             </div>
           </section>
