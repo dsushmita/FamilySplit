@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BalanceCard from "../components/BalanceCard";
 
 function Dashboard() {
   // Sample balance data
@@ -58,13 +59,10 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-
       {/* Navbar */}
       <nav className="bg-white shadow-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <h1 className="text-2xl font-bold text-purple-600">
-            FamilySplit
-          </h1>
+          <h1 className="text-2xl font-bold text-purple-600">FamilySplit</h1>
 
           <div className="flex items-center gap-4">
             <Link
@@ -86,13 +84,10 @@ function Dashboard() {
 
       {/* Main Content */}
       <main className="mx-auto max-w-6xl px-6 py-8">
-
         {/* Dashboard Header */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">
-              Dashboard
-            </h2>
+            <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
 
             <p className="mt-2 text-gray-600">
               Manage your family expenses in one place.
@@ -117,69 +112,35 @@ function Dashboard() {
         </div>
 
         {/* Balance Cards */}
+        {/* Balance Cards */}
         <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <BalanceCard
+            title="Net Balance"
+            amount={netBalance}
+            description="Your overall balance"
+            color={netBalance >= 0 ? "text-green-600" : "text-red-500"}
+          />
 
-          {/* Net Balance */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h3 className="text-sm font-medium text-gray-500">
-              Net Balance
-            </h3>
+          <BalanceCard
+            title="To Pay"
+            amount={toPay}
+            description="Money you need to pay"
+            color="text-red-500"
+          />
 
-            <p
-              className={`mt-3 text-3xl font-bold ${
-                netBalance >= 0
-                  ? "text-green-600"
-                  : "text-red-500"
-              }`}
-            >
-              ${netBalance.toFixed(2)}
-            </p>
-
-            <p className="mt-2 text-sm text-gray-400">
-              Your overall balance
-            </p>
-          </div>
-
-          {/* To Pay */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h3 className="text-sm font-medium text-gray-500">
-              To Pay
-            </h3>
-
-            <p className="mt-3 text-3xl font-bold text-red-500">
-              ${toPay.toFixed(2)}
-            </p>
-
-            <p className="mt-2 text-sm text-gray-400">
-              Money you need to pay
-            </p>
-          </div>
-
-          {/* To Receive */}
-          <div className="rounded-xl bg-white p-6 shadow-sm">
-            <h3 className="text-sm font-medium text-gray-500">
-              To Receive
-            </h3>
-
-            <p className="mt-3 text-3xl font-bold text-green-600">
-              ${toReceive.toFixed(2)}
-            </p>
-
-            <p className="mt-2 text-sm text-gray-400">
-              Money others need to pay you
-            </p>
-          </div>
+          <BalanceCard
+            title="To Receive"
+            amount={toReceive}
+            description="Money others need to pay you"
+            color="text-green-600"
+          />
         </div>
-
         {/* Groups and Expenses */}
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-
           {/* My Groups Section */}
           <section className="rounded-xl bg-white p-6 shadow-sm">
             <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">
-                My Groups
-              </h3>
+              <h3 className="text-xl font-bold text-gray-900">My Groups</h3>
 
               <button
                 type="button"
@@ -207,9 +168,7 @@ function Dashboard() {
 
                   <p
                     className={`font-semibold ${
-                      group.balance >= 0
-                        ? "text-green-600"
-                        : "text-red-500"
+                      group.balance >= 0 ? "text-green-600" : "text-red-500"
                     }`}
                   >
                     {group.balance >= 0 ? "+" : "-"}$
@@ -268,7 +227,6 @@ function Dashboard() {
         <footer className="mt-10 text-center text-sm text-gray-400">
           FamilySplit — Split expenses, stay connected.
         </footer>
-
       </main>
     </div>
   );
