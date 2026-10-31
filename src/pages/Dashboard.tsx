@@ -61,7 +61,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Navbar */}
+      {/* Navbarpp */}
       <Navbar />
 
       {/* Main Content */}
