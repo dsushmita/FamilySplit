@@ -2,6 +2,7 @@ import BalanceCard from "../components/BalanceCard";
 import GroupCard from "../components/GroupCard";
 import ExpenseCard from "../components/ExpenseCard";
 import Navbar from "../components/Navbar";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   // Sample balance data
@@ -77,19 +78,18 @@ function Dashboard() {
           </div>
 
           <div className="flex gap-3">
-            <button
-              type="button"
+            <Link
+              to="/groups/create"
               className="rounded-lg border border-purple-600 bg-white px-4 py-2 font-medium text-purple-600 hover:bg-purple-50"
             >
               + Create Group
-            </button>
-
-            <button
-              type="button"
+            </Link>
+            <Link
+              to="/expenses/create"
               className="rounded-lg bg-purple-600 px-4 py-2 font-medium text-white hover:bg-purple-700"
             >
               + Add Expense
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -124,12 +124,12 @@ function Dashboard() {
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">My Groups</h3>
 
-              <button
-                type="button"
+              <Link
+                to="/groups"
                 className="text-sm font-medium text-purple-600 hover:underline"
               >
                 View All
-              </button>
+              </Link>
             </div>
 
             <div className="space-y-4">
@@ -151,12 +151,12 @@ function Dashboard() {
                 Recent Expenses
               </h3>
 
-              <button
-                type="button"
+              <Link
+                to="/expenses"
                 className="text-sm font-medium text-purple-600 hover:underline"
               >
                 View All
-              </button>
+              </Link>
             </div>
 
             <div className="space-y-4">
