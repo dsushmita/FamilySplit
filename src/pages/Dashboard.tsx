@@ -3,6 +3,8 @@ import GroupCard from "../components/GroupCard";
 import ExpenseCard from "../components/ExpenseCard";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { checkBackend } from "../../services/api";
 
 function Dashboard() {
   // Sample balance data
@@ -60,6 +62,21 @@ function Dashboard() {
     },
   ];
 
+
+  const [message, setMessage] = useState("");
+
+useEffect(() => {
+  async function getMessage() {
+    try {
+      const result = await checkBackend();
+      setMessage(result);
+    } catch (error) {
+      console.error("Backend connection failed:", error);
+    }
+  }
+
+  getMessage();
+}, []);
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Navbarpp */}
