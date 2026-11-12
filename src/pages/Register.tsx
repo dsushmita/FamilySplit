@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { registerUser } from "../services/auth.service";
 
 function Register() {
   // Step 1: Create states
@@ -29,8 +30,8 @@ function Register() {
       return false;
     }
 
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters.");
+    if (password.length < 12 || password.length > 72) {
+      setError("Password must be between 12 and 72 characters.");
       return false;
     }
 
@@ -44,26 +45,38 @@ function Register() {
   };
 
   // Step 3: Handle form submission
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    setSuccess("");
+    setError(""); //WE CALL SETERROR FUNCTION THEN SET "" RIGHT
+    setSuccess(""); // update to the empty string
 
     const isValid = validateForm();
 
     if (!isValid) {
       return;
     }
-
-    // Backend registration will be added later.
-    setSuccess("Validation successful! Your form is ready.");
+    try {
+      const result = await registerUser({
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password: password,
+      }); //on this here we call registeruser function and we passed the three paramater name email and password
+      // to that function then we git result
+      console.log("Registration response:", result);
+      setSuccess("Account created successfully! Please log in.");
+      setName(""); // then we call functions setname and store name, ??
+      setEmail(""); // here empty means it does not store the current name, it clears the name by upating it to an empty string
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed.");
+    }
   };
 
   // Step 4: Render the registration form
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-900">
           Create Account
         </h1>
@@ -73,11 +86,8 @@ function Register() {
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
-
           {/* Full Name */}
-          <label className="mb-2 block text-sm font-medium">
-            Full Name
-          </label>
+          <label className="mb-2 block text-sm font-medium">Full Name</label>
 
           <input
             type="text"
@@ -88,9 +98,7 @@ function Register() {
           />
 
           {/* Email */}
-          <label className="mb-2 block text-sm font-medium">
-            Email
-          </label>
+          <label className="mb-2 block text-sm font-medium">Email</label>
 
           <input
             type="email"
@@ -101,9 +109,7 @@ function Register() {
           />
 
           {/* Password */}
-          <label className="mb-2 block text-sm font-medium">
-            Password
-          </label>
+          <label className="mb-2 block text-sm font-medium">Password</label>
 
           <input
             type="password"
@@ -128,14 +134,20 @@ function Register() {
 
           {/* Error Message */}
           {error && (
-            <p role="alert" className="mb-4 rounded-lg bg-red-100 p-3 text-sm text-red-700">
+            <p
+              role="alert"
+              className="mb-4 rounded-lg bg-red-100 p-3 text-sm text-red-700"
+            >
               {error}
             </p>
           )}
 
           {/* Success Message */}
           {success && (
-            <p role="status" className="mb-4 rounded-lg bg-green-100 p-3 text-sm text-green-700">
+            <p
+              role="status"
+              className="mb-4 rounded-lg bg-green-100 p-3 text-sm text-green-700"
+            >
               {success}
             </p>
           )}
@@ -147,7 +159,6 @@ function Register() {
           >
             Create Account
           </button>
-
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
@@ -156,10 +167,9 @@ function Register() {
             Sign In
           </Link>
         </p>
-
       </div>
     </div>
   );
 }
 
-export default Register; 
+export default Register;
