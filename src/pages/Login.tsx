@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, } from "react-router-dom";
+import { loginUser } from "../services/auth.service";
 
 function Login() {
+    const navigate = useNavigate(); //
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,26 +32,42 @@ function Login() {
     return true;
   };
 
-  // Step 2: Handle form submission
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  // Validate login details and authenticate with the backend.
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
 
-    setSuccess("");
-
-    const isValid = validateForm();
-
-    if (!isValid) {
+    if (!email.trim() || !password) {
+      setError("Email and password are required.");
       return;
     }
 
-    // Actual login authentication will be added later.
-    setSuccess("Validation successful! Login is not connected yet.");
-  };
+    try {
+      const result = await loginUser({
+        email: email.trim().toLowerCase(),
+        password,
+      });
 
+      /**
+     * For this learning project, sessionStorage provides a simple way to keep the JWT available when navigating between pages or refreshing the tab.
+
+It is cleared when the tab's session ends. However, browser storage is accessible to JavaScript, so it isn't the preferred long-term solution for sensitive authentication tokens. Later, we can implement a more secure cookie-based session.
+     */
+      // Save the JWT for authenticated API requests.
+      sessionStorage.setItem("token", result.token);
+
+      //The JWT is proof that the user has authenticated.
+      //Your backend requires that token when accessing protected APIs such as:
+
+      // Redirect to the dashboard after successful login.
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed.");
+    }
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-
         <h1 className="mb-2 text-center text-3xl font-bold text-gray-900">
           FamilySplit
         </h1>
@@ -59,11 +77,8 @@ function Login() {
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
-
           {/* Email */}
-          <label className="mb-2 block text-sm font-medium">
-            Email
-          </label>
+          <label className="mb-2 block text-sm font-medium">Email</label>
 
           <input
             type="email"
@@ -74,9 +89,7 @@ function Login() {
           />
 
           {/* Password */}
-          <label className="mb-2 block text-sm font-medium">
-            Password
-          </label>
+          <label className="mb-2 block text-sm font-medium">Password</label>
 
           <input
             type="password"
@@ -117,14 +130,10 @@ function Login() {
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="font-semibold text-purple-600"
-          >
+          <Link to="/register" className="font-semibold text-purple-600">
             Create Account
           </Link>
         </p>
-
       </div>
     </div>
   );
